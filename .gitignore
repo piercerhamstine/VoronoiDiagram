@@ -11,3 +11,6 @@
 
 # Executables
 *.exe
+
+#Other
+*.ppm
