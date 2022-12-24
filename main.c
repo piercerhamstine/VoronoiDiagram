@@ -4,6 +4,16 @@
 #define _height 400
 #define _width 400
 
+typedef unsigned int Color;
+
+enum BasicColors
+{
+    BLACK = 0x000000,
+    RED = 0x0000FF,
+    GREEN = 0x00FF00,
+    BLUE = 0xFF0000
+};
+
 static unsigned int pixelColors[_height][_width] = {0};
 
 void fillImage(unsigned int hexVal);
@@ -11,7 +21,7 @@ void saveImageToDisk();
 
 int main(void)
 {
-    fillImage(0xFF0000);
+    fillImage(BLUE);
     saveImageToDisk();
     return 0;
 };
