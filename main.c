@@ -3,9 +3,9 @@
 
 #define _height 400
 #define _width 400
+#define _seedcount 15
 
 typedef unsigned int Color;
-
 enum BasicColors
 {
     BLACK = 0x000000,
@@ -14,7 +14,14 @@ enum BasicColors
     BLUE = 0xFF0000
 };
 
+struct Seed
+{
+    int x;
+    int y;
+}typedef Seed;
+
 static unsigned int pixelColors[_height][_width] = {0};
+static Seed seeds[_seedcount];
 
 void fillImage(unsigned int hexVal);
 void saveImageToDisk();
