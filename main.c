@@ -23,14 +23,78 @@ struct Seed
 static unsigned int pixelColors[_height][_width] = {0};
 static Seed seeds[_seedcount];
 
+void setPixel(int x, int y, Color color);
 void fillImage(unsigned int hexVal);
 void saveImageToDisk();
+void bresenhamMidPointCircle();
 
 int main(void)
 {
     fillImage(BLUE);
+    bresenhamMidPointCircle(100, 100, 5, 1, RED);
     saveImageToDisk();
     return 0;
+};
+
+void drawOctants(int xi, int yi, int x, int y, Color color)
+{
+    setPixel(xi+x, yi+y, color);
+    setPixel(xi+x, yi-y, color);
+    setPixel(xi+y, yi+x, color);
+    setPixel(xi+y, yi-x, color);
+
+    setPixel(xi-x, yi+y, RED);
+    setPixel(xi-x, yi-y, color);
+    setPixel(xi-y, yi+x, color);
+    setPixel(xi-y, yi-x, color);
+};
+
+void fillOctants(int xi, int yi, int x, int y, Color color)
+{
+    for(int i = xi-x; i < xi+x; i++)
+    {
+        setPixel(i, yi+y, color);
+        setPixel(i, yi-y, color);
+    };
+
+    for(int i = yi-y; i < yi+y; i++)
+    {
+        setPixel(i, yi+x, color);
+        setPixel(i, yi-x, color);
+    };
+};
+
+void bresenhamMidPointCircle(int xi, int yi, int radius, int fill, Color color)
+{
+    int x = 0;
+    int y = radius;
+    int distance = 3-(2*radius);
+
+    while(x <= y)
+    {
+        if(fill>0)
+            fillOctants(xi, yi, x, y, color);
+        else
+            drawOctants(xi, yi, x, y, color);
+
+        x++;
+
+        // Outside circle, choose pixel that is over and down to stay within the circle.
+        if(distance > 0)
+        {
+            y--;
+            distance = distance+4*(x-y)+10;
+        }
+        else
+        {
+            distance = distance+4*x+6;
+        };
+    };
+};
+
+void setPixel(int x, int y, Color color)
+{
+    pixelColors[x][y] = color;
 };
 
 void fillImage(unsigned int hexVal)
