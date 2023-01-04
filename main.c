@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define _height 400
-#define _width 400
+#define _height 500
+#define _width 500
 #define _seedcount 15
 
 typedef unsigned int Color;
@@ -30,8 +30,8 @@ void bresenhamMidPointCircle();
 
 int main(void)
 {
-    fillImage(BLUE);
-    bresenhamMidPointCircle(100, 100, 5, 1, RED);
+    fillImage(BLACK);
+    bresenhamMidPointCircle(100, 100, 10, 0, GREEN);
     saveImageToDisk();
     return 0;
 };
@@ -43,7 +43,7 @@ void drawOctants(int xi, int yi, int x, int y, Color color)
     setPixel(xi+y, yi+x, color);
     setPixel(xi+y, yi-x, color);
 
-    setPixel(xi-x, yi+y, RED);
+    setPixel(xi-x, yi+y, color);
     setPixel(xi-x, yi-y, color);
     setPixel(xi-y, yi+x, color);
     setPixel(xi-y, yi-x, color);
@@ -66,6 +66,12 @@ void fillOctants(int xi, int yi, int x, int y, Color color)
 
 void bresenhamMidPointCircle(int xi, int yi, int radius, int fill, Color color)
 {
+    if(radius <= 0)
+    {
+        pixelColors[xi][yi] = color;
+        return;
+    };
+
     int x = 0;
     int y = radius;
     int distance = 3-(2*radius);
@@ -77,24 +83,23 @@ void bresenhamMidPointCircle(int xi, int yi, int radius, int fill, Color color)
         else
             drawOctants(xi, yi, x, y, color);
 
-        x++;
-
         // Outside circle, choose pixel that is over and down to stay within the circle.
         if(distance > 0)
         {
             y--;
-            distance = distance+4*(x-y)+10;
+            distance = distance+(4*x)-(4*y)+10;
         }
         else
         {
             distance = distance+4*x+6;
         };
+        x++;
     };
 };
 
 void setPixel(int x, int y, Color color)
 {
-    pixelColors[x][y] = color;
+    pixelColors[y][x] = color;
 };
 
 void fillImage(unsigned int hexVal)
